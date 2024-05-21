@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, FormControl, FormLabel, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import TimeTrackingContext from '../../context/TimeTrackingContext';
@@ -6,7 +6,6 @@ import { login } from '../../utils/apiUtils';
 import { useSnackbar } from 'notistack';
 
 const LoginPage = () => {
-    const { loginUser} = useContext(TimeTrackingContext)
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
     const [formData,setFormData] = useState({
@@ -23,6 +22,8 @@ const LoginPage = () => {
         })
     }
 
+
+
     const handleSubmit = async(e) => {
        try {
            e.preventDefault()
@@ -31,6 +32,7 @@ const LoginPage = () => {
         if (response.status === 200) {
             localStorage.setItem('token',response.data.token);
             localStorage.setItem('role',response.data.role);
+            localStorage.setItem('userId',response.data.userId);
         }
 
         navigate('/dashboard')
@@ -42,6 +44,13 @@ const LoginPage = () => {
         enqueueSnackbar(error.message,{variant:"error"});
        }
     }
+
+
+    useEffect(()=>{
+      if(localStorage.getItem('token')){
+        navigate('/dashboard')
+      }
+    },[])
   return (
     <main>
      

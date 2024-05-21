@@ -5,6 +5,7 @@ import NavigationBar from './components/NavigationBar';
 import Dashboard from './components/Dashboard/Dashboard';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import LoginPage from './components/LoginPage/LoginPage';
+import TaskPage from './components/TaskPage/TaskPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path='/task/:id' element={<TaskPage />} />
           
           {/* <Route path="/departments/:id" element={<DepartmentPage />} />
           <Route path="/projects/:id" element={<ProjectPage />} />

@@ -19,100 +19,148 @@ const getDepartments = (token) => {
   });
 };
 
-const getDepartmentById = (id) => {
-  return axios.get(`${API_BASE_URL}/departments/${id}`);
+const getDepartmentById = (id,token) => {
+  return axios.get(`${API_BASE_URL}/departments/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const createDepartment = (departmentData) => {
-  return axios.post(`${API_BASE_URL}/departments`, departmentData);
+const createDepartment = (token,departmentData) => {
+  return axios.post(`${API_BASE_URL}/departments`, departmentData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const updateDepartment = (id, updatedData) => {
-  return axios.put(`${API_BASE_URL}/departments/${id}`, updatedData);
+const updateDepartment = (id, updatedData,token) => {
+  return axios.put(`${API_BASE_URL}/departments/${id}`, updatedData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const deleteDepartment = (id) => {
-  return axios.delete(`${API_BASE_URL}/departments/${id}`);
+const deleteDepartment = (id,token) => {
+  return axios.delete(`${API_BASE_URL}/departments/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getProjects = () => {
-  return axios.get(`${API_BASE_URL}/projects`);
+const getProjects = (token) => {
+  return axios.get(`${API_BASE_URL}/projects`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getProjectById = (id) => {
-  return axios.get(`${API_BASE_URL}/projects/${id}`);
+const getProjectById = (id,token) => {
+  return axios.get(`${API_BASE_URL}/projects/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const createProject = (projectData) => {
-  return axios.post(`${API_BASE_URL}/projects`, projectData);
+const createProject = (token,projectData) => {
+  return axios.post(`${API_BASE_URL}/projects`, projectData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const updateProject = (id, updatedData) => {
-  return axios.put(`${API_BASE_URL}/projects/${id}`, updatedData);
+const updateProject = (id, updatedData,token) => {
+  return axios.put(`${API_BASE_URL}/projects/${id}`, updatedData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const deleteProject = (id) => {
-  return axios.delete(`${API_BASE_URL}/projects/${id}`);
+const deleteProject = (id,token) => {
+  return axios.delete(`${API_BASE_URL}/projects/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getModules = () => {
-  return axios.get(`${API_BASE_URL}/modules`);
+const getModules = (token) => {
+  return axios.get(`${API_BASE_URL}/modules`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getModuleById = (id) => {
-  return axios.get(`${API_BASE_URL}/modules/${id}`);
+const getModuleById = (id,token) => {
+  return axios.get(`${API_BASE_URL}/modules/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const createModule = (moduleData) => {
-  return axios.post(`${API_BASE_URL}/modules`, moduleData);
+const createModule = (token,moduleData) => {
+  return axios.post(`${API_BASE_URL}/modules`, moduleData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const updateModule = (id, updatedData) => {
-  return axios.put(`${API_BASE_URL}/modules/${id}`, updatedData);
+const updateModule = (id, updatedData,token) => {
+  return axios.put(`${API_BASE_URL}/modules/${id}`, updatedData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const deleteModule = (id) => {
-  return axios.delete(`${API_BASE_URL}/modules/${id}`);
+const deleteModule = (id,token) => {
+  return axios.delete(`${API_BASE_URL}/modules/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getTasks = () => {
-  return axios.get(`${API_BASE_URL}/tasks`);
+const getTasks = (token) => {
+  return axios.get(`${API_BASE_URL}/tasks`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getTaskById = (id) => {
-  return axios.get(`${API_BASE_URL}/tasks/${id}`);
+const getTaskById = (id,token) => {
+  return axios.get(`${API_BASE_URL}/tasks/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const createTask = (taskData) => {
-  return axios.post(`${API_BASE_URL}/tasks`, taskData);
+const createTask = (token,taskData) => {
+  return axios.post(`${API_BASE_URL}/tasks`, taskData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const updateTask = (id, updatedData) => {
-  return axios.put(`${API_BASE_URL}/tasks/${id}`, updatedData);
+const updateTask = (id, updatedData,token) => {
+  return axios.put(`${API_BASE_URL}/tasks/${id}`, updatedData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const deleteTask = (id) => {
-  return axios.delete(`${API_BASE_URL}/tasks/${id}`);
+const deleteTask = (id,token) => {
+  return axios.delete(`${API_BASE_URL}/tasks/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const createTimeLog = (timeLogData) => {
-  return axios.post(`${API_BASE_URL}/time-logs`, timeLogData);
+const createTimeLog = (token,timeLogData) => {
+  return axios.post(`${API_BASE_URL}/time-logs`, timeLogData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getAllTimeLogs = () => {
-  return axios.get(`${API_BASE_URL}/time-logs`);
+const getAllTimeLogs = (token) => {
+  return axios.get(`${API_BASE_URL}/time-logs`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const getTimeLogById = (id) => {
-  return axios.get(`${API_BASE_URL}/time-logs/${id}`);
+const getTimeLogById = (id,token) => {
+  return axios.get(`${API_BASE_URL}/time-logs/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const updateTimeLog = (id, updatedData) => {
-  return axios.put(`${API_BASE_URL}/time-logs/${id}`, updatedData);
+const updateTimeLog = (id, updatedData,token) => {
+  return axios.put(`${API_BASE_URL}/time-logs/${id}`, updatedData,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
-const deleteTimeLog = (id) => {
-  return axios.delete(`${API_BASE_URL}/time-logs/${id}`);
+const deleteTimeLog = (id,token) => {
+  return axios.delete(`${API_BASE_URL}/time-logs/${id}`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
 };
 
 
