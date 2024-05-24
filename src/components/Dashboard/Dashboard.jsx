@@ -286,10 +286,13 @@ const getAllreports = () => {
       <Grid item xs={12}>
         <Paper elevation={3}>
           <Card>
+            <Box sx={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <CardHeader title="Dashboard" />
             <Button variant="contained" onClick={() => handleLogout()}>
               Logout
             </Button>
+            </Box>
+            
             <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
