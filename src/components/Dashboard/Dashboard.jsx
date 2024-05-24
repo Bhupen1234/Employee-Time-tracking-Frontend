@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskId, setTaskId] = useState("");
+  const [priority,setPriority] = useState("")
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [employeeReport, setEmployeeReport] = useState({
@@ -425,6 +426,7 @@ const getAllreports = () => {
                             <TableRow>
                               <TableCell>Task Name</TableCell>
                               <TableCell>Description</TableCell>
+                              <TableCell>Priority</TableCell>
                               <TableCell>Actions</TableCell>
                             </TableRow>
                           </TableHead>
@@ -433,6 +435,7 @@ const getAllreports = () => {
                               <TableRow key={task._id}>
                                 <TableCell>{task.name}</TableCell>
                                 <TableCell>{task.description}</TableCell>
+                                <TableCell>{task.priority}</TableCell>
                                 <TableCell>
                                   {localStorage.getItem("role") ===
                                     "Employee" && (
@@ -616,6 +619,7 @@ const getAllreports = () => {
           <Select
             value={taskId}
             label="Module"
+
             onChange={(event) => setTaskId(event.target.value)}
           >
             {state.modules.map((module) => (
@@ -632,6 +636,19 @@ const getAllreports = () => {
             value={taskDescription}
             onChange={handleChangeTaskDescription}
           />
+          <br />
+          <Select
+            value={priority}
+            label="Priority"
+            sx={{ width:"200px"}}
+          defaultValue="Medium"
+            onChange={(event) => setPriority(event.target.value)}
+          >
+              <MenuItem  value={"Low"}>Low</MenuItem>
+              <MenuItem   value={"Medium"}>Medium</MenuItem>
+              <MenuItem value={"High"}>High</MenuItem>
+          </Select>
+          <br />
           <Button
             type="submit"
             onClick={() => {
@@ -639,6 +656,7 @@ const getAllreports = () => {
                 name: taskName,
                 description: taskDescription,
                 module: taskId,
+                priority : priority
               })
                 .then((response) => {
                   setOpenCreateTask(false);
