@@ -28,11 +28,13 @@ const LoginPage = () => {
        try {
            e.preventDefault()
         const response = await login(formData);
+        console.log(response.data);
 
         if (response.status === 200) {
             localStorage.setItem('token',response.data.token);
             localStorage.setItem('role',response.data.role);
             localStorage.setItem('userId',response.data.userId);
+            localStorage.setItem('username',response.data.username);
         }
 
         navigate('/dashboard')

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
-import { getTaskById, updateTask, createTimeLog } from '../../utils/apiUtils';
-import { Grid, Paper, Card, CardHeader, CardContent, CardActions, Button, TextField } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getTaskById, updateTask, createTimeLog, getUploadedFiles } from '../../utils/apiUtils';
+import { Grid, Paper, Card, CardHeader, CardContent, CardActions, Button, TextField, Input } from '@mui/material';
 
 const TaskPage = () => {
   const [taskId, setTaskId] = useState('');
@@ -12,12 +12,13 @@ const TaskPage = () => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [duration, setDuration] = useState(0);
-  const [notes, setNotes] = useState('');
+  const [filePaths, setFilePaths] = useState({})
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate()
   const { id } = useParams();
   useEffect(() => {
-    getTaskById(id, token)
+    getTaskById(token, id)
       .then((response) => {
         setTaskId(response.data._id);
         setTaskName(response.data.name);
@@ -38,11 +39,12 @@ const TaskPage = () => {
   const handleEndTask = () => {
     setEndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
     setIsTimerRunning(false);
-
+   
     
   };
 
   useEffect(()=>{
+    console.log(filePaths[0])
     const duration = moment.duration(moment(endTime).diff(moment(startTime)));
     const durationSeconds = duration.asSeconds();
     const timeLogData = {
@@ -51,17 +53,35 @@ const TaskPage = () => {
       startTime: startTime,
       endTime: endTime,
       duration: durationSeconds,
+      username: localStorage.getItem('username'),
+      userFilePaths : Object.values(filePaths).map(filePath => filePath.name),
       notes: 'Task completed',
     };
+
+    console.log(timeLogData.userFilePaths)
     updateTaskStatus()
     createTimeLog(token, timeLogData)
       .then((response) => {
         console.log('Time log created:', response.data);
       })
+      .then(()=>navigate('/dashboard'))
       .catch((error) => {
         console.error('Error creating time log:', error);
       });
+    
+  
   },[endTime])
+
+
+
+  const handlefileChange = (e) =>{
+    setStartTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+
+    setIsTimerRunning(true);
+   
+    console.log(e.target.files)
+    setFilePaths(e.target.files)
+  }
 
   const updateTaskStatus = () => {
     if (isTimerRunning) {
@@ -70,6 +90,8 @@ const TaskPage = () => {
       setTaskStatus('Completed');
     }
   };
+
+ 
 
   return (
     <Grid container spacing={2}>
@@ -89,7 +111,11 @@ const TaskPage = () => {
                   <TextField label="Status" value={taskStatus} readOnly />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField label="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
+                  {/* <TextField label="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} /> */}
+                  <form  enctype="multipart/form-data" >
+                     <input type="file" name="files" multiple onChange={(e)=>handlefileChange(e)}/>
+                    
+                  </form>
                 </Grid>
                 <Grid item xs={12}>
                   {isTimerRunning ? (

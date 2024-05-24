@@ -1,5 +1,5 @@
 
-import { Button, FormControl, FormLabel, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { Button, FormControl, FormLabel, Input, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../../utils/apiUtils';
@@ -87,41 +87,42 @@ export default function RegisterPage() {
         <FormControl>
         <FormLabel>Username</FormLabel>
           <Input
-            // html input attribute
             name="username"
-            type="username"
-            placeholder="johndoe@email.com"
+            type="text"
+            placeholder="john123"
             onChange={handleChange}
+            required
           />
           </FormControl>
           <FormControl>
           <FormLabel>Email</FormLabel>
           <Input
-            // html input attribute
             name="email"
             type="email"
             placeholder="johndoe@email.com"
             onChange={handleChange}
+            required
           />
         </FormControl>
         <FormControl>
           <FormLabel>Password</FormLabel>
           <Input
-            // html input attribute
+           
             name="password"
             type="password"
             placeholder="password"
             onChange={handleChange}
+            required
           />
         </FormControl>
         <FormControl>
           <FormLabel>Role</FormLabel>
-          <Select name='role' onChange={handleChange}>
+          <Select name='role' onChange={handleChange} required>
            <MenuItem value="Employee">Employee</MenuItem>
            <MenuItem value="Admin">Admin</MenuItem>
           </Select>
         </FormControl>
-        <Button sx={{ mt: 1 /* margin top */ }} onClick={handleSubmit}>Register</Button>
+        <Button sx={{ mt: 1 }} onClick={handleSubmit}>Register</Button>
         <Typography
         
           fontSize="sm"

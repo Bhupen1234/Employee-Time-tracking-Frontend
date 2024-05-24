@@ -109,7 +109,7 @@ const getTasks = (token) => {
   });
 };
 
-const getTaskById = (id,token) => {
+const getTaskById = (token,id) => {
   return axios.get(`${API_BASE_URL}/tasks/${id}`,{
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -134,6 +134,7 @@ const deleteTask = (id,token) => {
 };
 
 const createTimeLog = (token,timeLogData) => {
+  console.log(timeLogData)
   return axios.post(`${API_BASE_URL}/time-logs`, timeLogData,{
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -163,6 +164,14 @@ const deleteTimeLog = (id,token) => {
   });
 };
 
+const getUploadedFiles =(token)=>{
+  return axios.get(`${API_BASE_URL}/files`,{
+    headers: { Authorization: `Bearer ${token}` }
+  });
+}
+
+
+
 
 export {
   register,
@@ -191,5 +200,7 @@ export {
   getAllTimeLogs,
   getTimeLogById,
   updateTimeLog,
-  deleteTimeLog
+  deleteTimeLog,
+  API_BASE_URL,
+  getUploadedFiles
 };
