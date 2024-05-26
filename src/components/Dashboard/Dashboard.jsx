@@ -13,6 +13,10 @@ import {
   API_BASE_URL,
   getUploadedFiles,
   getTaskById,
+  deleteDepartment,
+  deleteProject,
+  deleteModule,
+  deleteTask,
 } from "../../utils/apiUtils";
 import {
   Grid,
@@ -40,6 +44,7 @@ import {
 import TimeTrackingContext from "../../context/TimeTrackingContext";
 import { useNavigate } from "react-router-dom";
 import TaskPage from "../TaskPage/TaskPage";
+import { useSnackbar } from "notistack";
 
 const Dashboard = () => {
   const { state, setDepartments, setProjects, setModules, setTasks } =
@@ -66,6 +71,7 @@ const Dashboard = () => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskId, setTaskId] = useState("");
   const [priority,setPriority] = useState("")
+
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [employeeReport, setEmployeeReport] = useState({
@@ -77,7 +83,7 @@ const Dashboard = () => {
 
   const [reports, setReports] = useState([]);
   const [taskNames, setTaskNames] = useState({});
-
+  const {enqueueSnackbar}= useSnackbar()
 
   const navigate = useNavigate();
   const style = {
@@ -126,12 +132,7 @@ const Dashboard = () => {
       });
   }, [token]);
 
-  // const fetchFiles = async () => {
-  //   const res = await getUploadedFiles(token);
-  //   console.log(res.data);
-  // };
 
-  // fetchFiles()
 
   const handleCreateDepartment = () => {
     createDepartment(token, {
@@ -219,22 +220,7 @@ const Dashboard = () => {
   };
 
   const handleStartTask = (taskId) => {
-    // createTask(token, { name: taskName, description: taskDescription, projectId: projectId, moduleId: taskId })
-    //  .then((response) => {
-    //     setOpenCreateTask(false);
-    //     setTaskName('');
-    //     setTaskDescription('');
-    //     getTasks(token)
-    //      .then((response) => {
-    //         setTasks(response.data);
-    //       })
-    //      .catch((error) => {
-    //         console.error('Error fetching tasks:', error);
-    //       });
-    //   })
-    //  .catch((error) => {
-    //     console.error('Error creating task:', error);
-    //   });
+
 
     setTaskId(taskId);
     setStartTime(new Date());
@@ -245,7 +231,7 @@ const getAllreports = () => {
     getAllTimeLogs(token)
       .then((response) => {
         setReports(response.data);
-        // Fetch task names for each report
+     
         response.data.forEach((report) => {
           getTaskById(token, report.task)
             .then((res) => {
@@ -263,6 +249,109 @@ const getAllreports = () => {
         console.error("Error fetching reports:", error);
       });
   };
+
+  const handleDeleteDepartment = async(departmentId)=>{
+    let isDepartmentDependency = false;
+
+    const projects = await getProjects(token)
+    isDepartmentDependency = projects.data.find((project) => project.department === departmentId)
+
+
+if(isDepartmentDependency){
+
+ enqueueSnackbar("Cannot delete department because of Dependency", { variant: "error",});
+}
+else {
+  deleteDepartment( departmentId,token)
+     .then((response) => {
+        getDepartments(token)
+          .then((response) => {
+            setDepartments(response.data);
+            enqueueSnackbar("Department deleted successfully", { variant: "success"});
+          })
+          .catch((error) => {
+            console.error("Error fetching departments:", error);
+
+          });
+      })
+     .catch((error) => {
+        console.error("Error deleting department:", error);
+      });
+}
+
+    
+  }
+
+
+  const handleDeleteProject = async (projectId)=>{
+    let isProjectDependency = false;
+    const modules = await getModules(token);
+    isProjectDependency = modules.data.find((module) => module.project === projectId)
+    if(isProjectDependency){
+      enqueueSnackbar("Cannot delete project because of Dependency", { variant: "error",});
+    }
+    else {
+      deleteProject(projectId,token)
+     .then((response) => {
+       getProjects(token)
+          .then((response) => {
+            setProjects(response.data);
+            enqueueSnackbar("Project deleted successfully", { variant: "success",});
+          })
+          .catch((error) => {
+            console.error("Error fetching projects:", error);
+          });
+      })
+     .catch((error) => {
+       console.error("Error deleting project:", error);
+      });
+    }
+  }
+
+  const handleDeleteModule=async(moduleId)=>{
+      let isModuleDependency = false;
+      const tasks = await getTasks(token);
+      isModuleDependency = tasks.data.find((task) => task.module === moduleId)
+      if(isModuleDependency){
+        enqueueSnackbar("Cannot delete module because of Dependency", { variant: "error",});
+      }
+      else {
+        deleteModule(moduleId,token)
+       .then((response) => {
+         getModules(token)
+            .then((response) => {
+              setModules(response.data);
+              enqueueSnackbar("Module deleted successfully", { variant: "success",});
+            })
+            .catch((error) => {
+              console.error("Error fetching modules:", error);
+            });
+        })
+       .catch((error) => {
+         console.error("Error deleting module:", error);
+        });
+      }
+  }
+
+  const handleDeleteTask=async(taskId)=>{
+   
+    
+      deleteTask(taskId,token)
+     .then((response) => {
+       getTasks(token)
+          .then((response) => {
+            setTasks(response.data);
+            enqueueSnackbar("Task deleted successfully", { variant: "success",});
+          })
+          .catch((error) => {
+            console.error("Error fetching tasks:", error);
+          });
+      })
+     .catch((error) => {
+       console.error("Error deleting task:", error);
+      });
+    }
+  
   
 
   // useEffect(()=>{
@@ -316,6 +405,7 @@ const getAllreports = () => {
                                 <TableCell>{department.description}</TableCell>
                                 <TableCell>
                                   {localStorage.getItem("role") === "Admin" && (
+                                    <>
                                     <Button
                                       size="small"
                                       variant="contained"
@@ -326,6 +416,17 @@ const getAllreports = () => {
                                     >
                                       Create Project
                                     </Button>
+                                    <br />
+                                    <Button
+                                     size="small"
+                                     variant="contained"
+                                     color="primary"
+                                     onClick={()=>handleDeleteDepartment(department._id)}
+                                     style={{marginTop:"5px"}}
+                                    >
+                                      Delete Department
+                                    </Button>
+                                    </>
                                   )}
                                 </TableCell>
                               </TableRow>
@@ -356,6 +457,7 @@ const getAllreports = () => {
                                 <TableCell>{project.description}</TableCell>
                                 <TableCell>
                                   {localStorage.getItem("role") === "Admin" && (
+                                    <>
                                     <Button
                                       size="small"
                                       variant="contained"
@@ -366,6 +468,15 @@ const getAllreports = () => {
                                     >
                                       Create Module
                                     </Button>
+                                    <br />
+                                     <Button
+                                     size="small"
+                                     variant="contained"
+                                     color="primary"
+                                     onClick={()=>handleDeleteProject(project._id)}
+                                     style={{marginTop:"5px"}}v
+                                     >Delete Project</Button>
+                                    </>
                                   )}
                                 </TableCell>
                               </TableRow>
@@ -396,6 +507,7 @@ const getAllreports = () => {
                                 <TableCell>{module.description}</TableCell>
                                 <TableCell>
                                   {localStorage.getItem("role") === "Admin" && (
+                                    <>
                                     <Button
                                       size="small"
                                       variant="contained"
@@ -406,6 +518,17 @@ const getAllreports = () => {
                                     >
                                       Create Task
                                     </Button>
+                                    <br />
+                                     <Button
+                                     size="small"
+                                     variant="contained"
+                                     color="primary"
+                                     onClick={()=>handleDeleteModule(module._id)}
+                                     style={{marginTop:"5px"}}
+                                     >
+                                      Delete Module
+                                     </Button>
+                                    </>
                                   )}
                                 </TableCell>
                               </TableRow>
@@ -444,10 +567,25 @@ const getAllreports = () => {
                                       variant="contained"
                                       color="primary"
                                       onClick={() => handleStartTask(task._id)}
+                                      
                                     >
                                       Start Task
                                     </Button>
                                   )}
+                                  <br />
+                                 {localStorage.getItem("role") === "Admin" && (
+                                  <>
+                                   <Button
+                                     size="small"
+                                     variant="contained"
+                                     color="primary"
+                                     onClick={() => handleDeleteTask(task._id)}
+                                     style={{marginTop:"5px"}}
+                                     >
+                                      Delete Task
+                                     </Button>
+                                  </>
+                                 )}
                                 </TableCell>
                               </TableRow>
                             ))}
